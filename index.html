@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+    <header>
+        <meta charset="utf8">
+        <title>
+            Mouse Double Click Test by blackkat98
+        </title>
+        <style>
+            * {
+                font-family: Arial, Helvetica, sans-serif;
+            }
+            #top {
+                width: 100%;
+                height: 60px;
+                text-align: center;
+            }
+            #mid {
+                width: 100%;
+                padding: 10px;
+                text-align: center;
+                align-items: center;
+            }
+            #mainbutton {
+                width: 64%;
+                height: 200px;
+                border: 2px solid #000000;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 32px;
+            }
+            #mainstats {
+                display: inline-block;
+                width: 60%;
+                margin: 20px 20% 20px 20%;
+            }
+            .mainstat {
+                display: inline-block;
+                width: 30%;
+                height: 120px;
+                border: 2px solid #000000;
+                border-radius: 5px;
+                overflow: hidden;
+            }
+            .stattext {
+                font-size: 52px;
+            }
+        </style>
+    </header>
+    <body>
+        <div id="top">
+            <h1>MOUSE DOUBLE CLICK TEST</h1>
+        </div>
+        <div id="mid">
+            <button id="mainbutton" onmousedown="check()">
+                
+            </button>
+            <div id="mainstats">
+                <div class="mainstat">
+                    Left Button
+                    <h1 id="leftstat" class="stattext">0</h1>
+                </div>
+                <div class="mainstat">
+                    Middle Button
+                    <h1 id="middlestat" class="stattext">0</h1>
+                </div>
+                <div class="mainstat">
+                    Right Button
+                    <h1 id="rightstat" class="stattext">0</h1>
+                </div>
+            </div>
+            <div id="mainstats">
+                <div class="mainstat">
+                    Double Click Count
+                    <h1 id="leftalert" class="stattext">0</h1>
+                </div>
+                <div class="mainstat">
+                    Double Click Count
+                    <h1 id="middlealert" class="stattext">0</h1>
+                </div>
+                <div class="mainstat">
+                    Double Click Count
+                    <h1 id="rightalert" class="stattext">0</h1>
+                </div>
+            </div>
+            <button onclick="reset()">
+                RESET
+            </button>
+        </div>
+        <script type="text/javascript">
+            var timeFrame = 500
+            var lastClickedButton = 0
+            var lastClickTime = 0
+            document.getElementById("mainbutton").textContent = `CLICK ME (TIME FRAME = ${timeFrame} μs)`
+            document.body.oncontextmenu = function () {
+                return false
+            }
+
+            function reset() {
+                document.getElementById("leftstat").textContent = 0
+                document.getElementById("middlestat").textContent = 0
+                document.getElementById("rightstat").textContent = 0
+            }
+
+            function check() {
+                let oldClickedButton = lastClickedButton
+                lastClickedButton = event.which
+                let newTime = window.performance.now()
+                let oldTime = lastClickTime
+                let whichStat = ''
+                let whichDbCl = ''
+
+                switch (event.which) {
+                    case 1:
+                        whichStat = 'leftstat'
+                        whichDbCl = 'leftalert'
+                        break
+                    case 2:
+                        event.preventDefault()
+                        whichStat = 'middlestat'
+                        whichDbCl = 'middlealert'
+                        break
+                    case 3:
+                        whichStat = 'rightstat'
+                        whichDbCl = 'rightalert'
+                        break
+                }
+
+                if (lastClickedButton == oldClickedButton) {
+                    let timeDiff = newTime - oldTime
+                    console.log(timeDiff)
+
+                    if (timeDiff < timeFrame) {
+                        let dbClText = document.getElementById(whichDbCl).textContent
+                        document.getElementById(whichDbCl).textContent = parseInt(dbClText) + 1
+                    }
+                }
+
+                if (whichStat) {
+                    let statText = document.getElementById(whichStat).textContent
+                    document.getElementById(whichStat).textContent = parseInt(statText) + 1
+                }
+            }
+        </script>
+    </body>
+</html>
